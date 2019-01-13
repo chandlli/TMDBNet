@@ -19,6 +19,11 @@ namespace ThemovieDB.Net
 
         public async Task<MultiSearchResult> MultiSearchAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
         {
+            if (query is null)
+            {
+                throw new ArgumentNullException("query");
+            }
+
             return await search.MultiSearchAsync(query, language, page, includeAdult, region);
         }
     }
