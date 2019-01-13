@@ -5,18 +5,21 @@ using ThemovieDB.Net.Model.Search;
 
 namespace ThemovieDB.Net
 {
-    public sealed class ThemovieClient : ISearch
+    public sealed class ThemovieClient
     {
-        private readonly string apiKey;
+        private readonly ISearch search;
 
-        public ThemovieClient(string apiKey)
+        public ThemovieClient(string apiKey, HttpConnection httpConnection = null)
         {
-            this.apiKey = apiKey;
+            if (httpConnection is null)
+                httpConnection = new HttpConnection();
+
+            this.search = new Search(apiKey, httpConnection);
         }
 
-        public Task<MultiSearchResult> MultiSearchAsync(string apiKey, string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
+        public async Task<MultiSearchResult> MultiSearchAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
         {
-            throw new NotImplementedException();
+            return await search.MultiSearchAsync(query, language, page, includeAdult, region);
         }
     }
 }
