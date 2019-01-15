@@ -24,6 +24,11 @@ namespace ThemovieDB.Net
                 throw new ArgumentNullException("query");
             }
 
+            if (string.IsNullOrEmpty(query))
+            {
+                throw new ArgumentException("query");
+            }
+
             return await search.MultiSearchAsync(query, language, page, includeAdult, region);
         }
     }

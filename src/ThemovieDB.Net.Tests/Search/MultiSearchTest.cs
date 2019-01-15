@@ -23,5 +23,12 @@ namespace ThemovieDB.Net.Tests
             var client = new ThemovieClient(apiKey, connection);
             await Assert.ThrowsAsync<ArgumentNullException>(() => client.MultiSearchAsync(null));
         }
+
+        [Fact]
+        public async Task Search_Query_Empty_Should_Throw_Exception()
+        {
+            var client = new ThemovieClient(apiKey, connection);
+            await Assert.ThrowsAsync<ArgumentException>(() => client.MultiSearchAsync(string.Empty));
+        }
     }
 }

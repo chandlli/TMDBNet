@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ThemovieDB.Net.Model.Search
 {
-    public interface ISearch
+    internal interface ISearch
     {
         Task<MultiSearchResult> MultiSearchAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null);
     }

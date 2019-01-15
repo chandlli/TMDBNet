@@ -6,6 +6,8 @@ namespace ThemovieDB.Net.Model
 {
     public enum MediaType
     {
-        Movie
+        Movie,
+        Tv,
+        Person
     }
 }

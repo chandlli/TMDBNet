@@ -10,7 +10,7 @@ namespace ThemovieDB.Net.Model.Search
     {
         private readonly string apiKey;
         private readonly HttpConnection httpConnection;
-        private const string MULTI_SEARCH_PATH = "/search/multi";
+        private const string MULTI_SEARCH_PATH = "search/multi";
 
         public Search(string apiKey, HttpConnection httpConnection)
         {
@@ -22,10 +22,15 @@ namespace ThemovieDB.Net.Model.Search
         {
             var queryString = HttpUtility.ParseQueryString(string.Empty);
 
+            queryString["api_key"] = apiKey;
             queryString["query"] = query;
             queryString["page"] = page.ToString();
             queryString["includeAdult"] = includeAdult.ToString();
-            queryString["region"] = region.ToString();
+
+            if (!string.IsNullOrEmpty(region))
+            {
+                queryString["region"] = region.ToString();
+            }
 
             if (!string.IsNullOrEmpty(language))
             {
@@ -36,7 +41,7 @@ namespace ThemovieDB.Net.Model.Search
 
             var client = httpConnection.GetClient();
 
-            var response = await client.GetAsync($"{queryStringResult}?{queryStringResult}");
+            var response = await client.GetAsync($"{MULTI_SEARCH_PATH}?{queryStringResult}");
 
             if (response.IsSuccessStatusCode)
             {
