@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text;
 using ThemovieDB.Net.Model;
 
-namespace ThemovieDB.Net
+namespace TMDBNet
 {
     public class HttpConnection
     {

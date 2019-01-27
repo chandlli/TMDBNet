@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ThemovieDB.Net.Model.Search
+namespace TMDBNet.Model.Search
 {
-    public class MultiSearchItemResult
+    public sealed class MultiSearch
     {
         public int Id { get; set; }
         public string Name { get; set; }

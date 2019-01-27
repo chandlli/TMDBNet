@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ThemovieDB.Net.Model
+namespace TMDBNet.Model
 {
     public enum MediaType
     {
