@@ -6,7 +6,7 @@ using ThemovieDB.Net.Model;
 
 namespace TMDBNet
 {
-    public class HttpConnection
+    public sealed class HttpConnection
     {
         private static HttpClient client;
         private const string URL_API_V3 = "https://api.themoviedb.org/3/";

@@ -1,17 +1,23 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace TMDBNet.Model.Search
 {
-    public sealed class SearchResult<T> where T : class
+    public class SearchResult<T>
     {
-        public int? Page { get; set; }
-        public IList<T> Results { get; set; }
-        [JsonProperty("total_results")]
-        public int? TotalResults { get; set; }
-        [JsonProperty("total_pages")]
-        public int? TotalPages { get; set; }
+        public int? Page { get; private set; }
+        public int? TotalResults { get; private set; }
+        public int? TotalPages { get; private set; }
+
+        public T Results { get; private set; }
+
+        public SearchResult(T results, int? page = null, int? totalResults = null, int? totalPages = null)
+        {
+            Page = page;
+            TotalResults = totalResults;
+            TotalPages = totalPages;
+            Results = results;
+        }
     }
 }

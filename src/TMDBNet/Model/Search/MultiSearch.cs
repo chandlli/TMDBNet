@@ -7,20 +7,15 @@ namespace TMDBNet.Model.Search
 {
     public sealed class MultiSearch
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Title { get; set; }
+        public IList<Movie> Movies { get; private set; }
+        public IList<Person> Persons { get; private set; }
+        public IList<TvShow> TvShows { get; private set; }
 
-        [JsonProperty("original_name")]
-        public string OriginalName { get; set; }
-
-        [JsonProperty("original_title")]
-        public string OriginalTitle { get; set; }
-
-        [JsonProperty("media_type")]
-        public MediaType MediaType { get; set; }
-
-        [JsonProperty("release_date")]
-        public DateTime? ReleasedDate { get; set; }
+        public MultiSearch()
+        {
+            Movies = new List<Movie>();
+            Persons = new List<Person>();
+            TvShows = new List<TvShow>();
+        }
     }
 }

@@ -5,43 +5,22 @@ using System.Text;
 
 namespace TMDBNet.Model.Search
 {
-    public sealed class Movie
+    public sealed class Movie : Media
     {
-        [JsonProperty("poster_path")]
-        public string PosterPath { get; set; }
+        public string Title { get; private set; }
+        public string OriginalTitle { get; private set; }
+        public string ReleaseDate { get; private set; }
+        public bool? Video { get; private set; }
 
-        [JsonProperty("adult")]
-        public bool? IsAdult { get; set; }
-
-        public string Overview { get; set; }
-
-        [JsonProperty("release_date")]
-        public string ReleaseDate { get; set; }
-
-        [JsonProperty("genre_ids")]
-        public IList<int> Genres { get; set; }
-
-        public string Id { get; set; }
-
-        [JsonProperty("original_title")]
-        public string OriginalTitle { get; set; }
-
-        [JsonProperty("original_language")]
-        public string OriginalLanguage { get; set; }
-
-        public string Title { get; set; }
-
-        [JsonProperty("backdrop_path")]
-        public string BackdropPath { get; set; }
-
-        public decimal? Popularity { get; set; }
-
-        [JsonProperty("vote_count")]
-        public int VoteCount { get; set; }
-
-        public bool? Video { get; set; }
-
-        [JsonProperty("vote_average")]
-        public decimal VoteAverage { get; set; }
+        public Movie(string posterPath = null, string overview = null, string originalLanguage = null, string backdropPath = null, string title = null, string originalTitle = null, string releaseDate = null,
+            decimal? popularity = null, int? voteCount = null, decimal? voteAverage = null, int? id = null, bool? video = null, bool? isAdult = null
+            , IList<int> genresId = null)
+            : base(posterPath, overview, originalLanguage, backdropPath, popularity, voteCount, voteAverage, id, isAdult, genresId)
+        {
+            Title = title;
+            OriginalTitle = originalTitle;
+            ReleaseDate = releaseDate;
+            Video = video;
+        }
     }
 }

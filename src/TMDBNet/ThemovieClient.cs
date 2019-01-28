@@ -23,7 +23,10 @@ namespace TMDBNet
 
         public T CreateApi<T>() where T : IApi
         {
-            return (T)apis[typeof(T)];
+            if (apis.ContainsKey(typeof(T)))
+                return (T)apis[typeof(T)];
+
+            throw new Exception("Type not registred");
         }
     }
 }
