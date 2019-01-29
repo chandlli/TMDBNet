@@ -16,58 +16,58 @@ namespace TMDBNet.Tests.Implementations
 {
     public class SearchTest
     {
-        private readonly dynamic allProperties;
+        private readonly SearchResultDTO allProperties;
 
         public SearchTest()
         {
-            allProperties = new
+            allProperties = new SearchResultDTO()
             {
-                page = 1,
-                results = new[]
+                Page = 1,
+                Results = new SearchResultItemDTO[]
                 {
-                    new
+                    new SearchResultItemDTO()
                     {
-                        poster_path = "/cezWGskPY5x7GaglTTRN4Fugfb8.jpg",
-                        adult = true,
-                        overview = "When an unexpected enemy emerges and threatens global safety and security, Nick Fury, director of the international peacekeeping agency known as S.H.I.E.L.D., finds himself in need of a team to pull the world back from the brink of disaster. Spanning the globe, a daring recruitment effort begins!",
-                        release_date = "2012-04-25",
-                        genre_ids = new int[]
+                        PosterPath = "/cezWGskPY5x7GaglTTRN4Fugfb8.jpg",
+                        IsAdult = true,
+                        Overview = "When an unexpected enemy emerges and threatens global safety and security, Nick Fury, director of the international peacekeeping agency known as S.H.I.E.L.D., finds himself in need of a team to pull the world back from the brink of disaster. Spanning the globe, a daring recruitment effort begins!",
+                        ReleaseDate = "2012-04-25",
+                        GenresId = new int[]
                         {
                             878, 28, 12
                         },
-                        id = 24428,
-                        original_title = "The Avengers",
-                        original_language = "en",
-                        title = "The Avengers",
-                        backdrop_path = "/hbn46fQaRmlpBuUrEiFqv0GDL6Y.jpg",
-                        popularity = 7.353212,
-                        vote_count = 8503,
-                        video = true,
-                        vote_average = 7.33
+                        Id = 24428,
+                        OriginalTitle = "The Avengers",
+                        OriginalLanguage = "en",
+                        Title = "The Avengers",
+                        BackdropPath = "/hbn46fQaRmlpBuUrEiFqv0GDL6Y.jpg",
+                        Popularity = 7.353212m,
+                        VoteCount = 8503,
+                        Video = true,
+                        VoteAverage = 7.33m
                     },
-                    new
+                    new SearchResultItemDTO()
                     {
-                        poster_path = "/7cJGRajXMU2aYdTbElIl6FtzOl2.jpg",
-                        adult = true,
-                        overview = "British Ministry agent John Steed, under direction from \"Mother\", investigates a diabolical plot by arch-villain Sir August de Wynter to rule the world with his weather control machine. Steed investigates the beautiful Doctor Mrs. Emma Peel, the only suspect, but simultaneously falls for her and joins forces with her to combat Sir August.",
-                        release_date = "1998-08-13",
-                        genre_ids = new int[]
+                        PosterPath = "/7cJGRajXMU2aYdTbElIl6FtzOl2.jpg",
+                        IsAdult = true,
+                        Overview = "British Ministry agent John Steed, under direction from \"Mother\", investigates a diabolical plot by arch-villain Sir August de Wynter to rule the world with his weather control machine. Steed investigates the beautiful Doctor Mrs. Emma Peel, the only suspect, but simultaneously falls for her and joins forces with her to combat Sir August.",
+                        ReleaseDate = "1998-08-13",
+                        GenresId = new int[]
                         {
                             53
                         },
-                        id = 9320,
-                        original_title = "The Avengers",
-                        original_language = "en",
-                        title = "The Avengers",
-                        backdrop_path = "/8YW4rwWQgC2JRlBcpStMNUko13k.jpg",
-                        popularity = 2.270454,
-                        vote_count = 111,
-                        video = true,
-                        vote_average = 4.7
+                        Id = 9320,
+                        OriginalTitle = "The Avengers",
+                        OriginalLanguage = "en",
+                        Title = "The Avengers",
+                        BackdropPath = "/8YW4rwWQgC2JRlBcpStMNUko13k.jpg",
+                        Popularity = 2.270454m,
+                        VoteCount = 111,
+                        Video = true,
+                        VoteAverage = 4.7m
                     }
                 },
-                total_results = 2,
-                total_pages = 1
+                TotalResults = 2,
+                TotalPages = 1
             };
         }
 
@@ -90,7 +90,7 @@ namespace TMDBNet.Tests.Implementations
                })
                .Verifiable();
 
-            
+
             var httpConnection = new HttpConnection(handlerMock.Object);
 
             var search = new Search("", httpConnection);
@@ -99,13 +99,33 @@ namespace TMDBNet.Tests.Implementations
 
             result.ShouldNotBeNull();
             result.Results.ShouldNotBeNull();
-            result.Results.Count.ShouldBe(2);
+            result.Results.Count.ShouldBe(allProperties.Results.Length);
 
             var first = result.Results.First();
-            var expectedFirst = allProperties.results[0];
+            var expectedFirst = allProperties.Results.First();
 
-            first.PosterPath.ShouldBe(expectedFirst.poster_path as string);
-#warning TO_DO
+            first.PosterPath.ShouldBe(expectedFirst.PosterPath);
+            first.IsAdult.HasValue.ShouldBeTrue();
+            first.IsAdult.ShouldBe(expectedFirst.IsAdult);
+            first.Overview.ShouldBe(expectedFirst.Overview);
+            first.ReleaseDate.ShouldBe(expectedFirst.ReleaseDate);
+            first.GenresId.ShouldNotBeNull();
+            first.GenresId.Count.ShouldBe(expectedFirst.GenresId.Count);
+            first.GenresId.ShouldBeSubsetOf(expectedFirst.GenresId);
+            first.Id.HasValue.ShouldBeTrue();
+            first.Id.ShouldBe(expectedFirst.Id);
+            first.OriginalTitle.ShouldBe(expectedFirst.OriginalTitle);
+            first.OriginalLanguage.ShouldBe(expectedFirst.OriginalLanguage);
+            first.Title.ShouldBe(expectedFirst.Title);
+            first.BackdropPath.ShouldBe(expectedFirst.BackdropPath);
+            first.Popularity.HasValue.ShouldBeTrue();
+            first.Popularity.ShouldBe(expectedFirst.Popularity);
+            first.VoteCount.HasValue.ShouldBeTrue();
+            first.VoteCount.ShouldBe(expectedFirst.VoteCount);
+            first.Video.HasValue.ShouldBeTrue();
+            first.Video.ShouldBe(expectedFirst.Video);
+            first.VoteAverage.HasValue.ShouldBeTrue();
+            first.VoteAverage.ShouldBe(expectedFirst.VoteAverage);
         }
     }
 }

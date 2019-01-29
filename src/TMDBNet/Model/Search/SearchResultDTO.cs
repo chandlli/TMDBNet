@@ -7,8 +7,10 @@ namespace TMDBNet.Model.Search
 {
     internal sealed class SearchResultDTO
     {
+        [JsonProperty("page")]
         public int? Page { get; set; }
 
+        [JsonProperty("results")]
         public SearchResultItemDTO[] Results { get; set; }
 
         [JsonProperty("total_results")]
