@@ -32,21 +32,9 @@ namespace TMDBNet.Model.Search
             KnowForMovies.Add(movie);
         }
 
-        internal void AddKnowForMovieRange(IList<Movie> moviesRange)
-        {
-            foreach (var movie in moviesRange)
-                AddKnowForMovie(movie);
-        }
-
         internal void AddKnowForTvShow(TvShow tvShow)
         {
             KnowForTvShows.Add(tvShow);
-        }
-
-        internal void AddKnowForTvShowRange(IList<TvShow> tvShowsRange)
-        {
-            foreach (var tvShow in tvShowsRange)
-                AddKnowForTvShow(tvShow);
         }
     }
 }

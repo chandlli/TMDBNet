@@ -17,5 +17,20 @@ namespace TMDBNet.Model.Search
             Persons = new List<Person>();
             TvShows = new List<TvShow>();
         }
+
+        internal void AddMovie(Movie movie)
+        {
+            Movies.Add(movie);
+        }
+
+        internal void AddPerson(Person person)
+        {
+            Persons.Add(person);
+        }
+
+        internal void AddTvShow(TvShow tvShow)
+        {
+            TvShows.Add(tvShow);
+        }
     }
 }

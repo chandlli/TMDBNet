@@ -70,6 +70,6 @@ namespace TMDBNet.Model.Search
         public string ProfilePath { get; set; }
 
         [JsonProperty("known_for")]
-        public IList<dynamic> KnowFor { get; set; }
+        public IList<SearchResultItemDTO> KnowFor { get; set; }
     }
 }

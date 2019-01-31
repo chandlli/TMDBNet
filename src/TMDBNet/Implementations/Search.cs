@@ -32,26 +32,139 @@ namespace TMDBNet.Implementations
             queryString.Add("region", region);
             queryString.Add("language", language);
 
-            string finalPath = $"search/movie?{queryString.ToString()}";
+            var searchResultDTO = await GetSearchResultAsync("search/movie", queryString);
 
+            var movies = new List<Movie>();
+
+            if (searchResultDTO.Results != null)
+            {
+                foreach (var searchResult in searchResultDTO.Results)
+                    movies.Add(SearchResultFactory.CreateMovie(searchResult));
+            }
+
+            return new SearchResult<IList<Movie>>(movies, searchResultDTO.Page,
+                searchResultDTO.TotalResults, searchResultDTO.TotalPages);
+        }
+
+        public async Task<SearchResult<IList<TvShow>>> TvShowAsync(string query, string language = null, int page = 1, int? firstAirDateYear = null)
+        {
+            var queryString = CreateQueryString();
+
+            queryString.Add("query", query);
+            queryString.Add("language", language);
+            queryString.Add("page", page.ToString());
+            queryString.Add("first_air_date_year", firstAirDateYear.ToString());
+
+            var searchResultDTO = await GetSearchResultAsync("search/tv", queryString);
+
+            var tvShows = new List<TvShow>();
+
+            if (searchResultDTO.Results != null)
+            {
+                foreach (var searchResult in searchResultDTO.Results)
+                    tvShows.Add(SearchResultFactory.CreateTvShow(searchResult));
+            }
+
+            return new SearchResult<IList<TvShow>>(tvShows, searchResultDTO.Page,
+                searchResultDTO.TotalResults, searchResultDTO.TotalPages);
+        }
+
+        public async Task<SearchResult<IList<Person>>> PersonAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
+        {
+            var queryString = CreateQueryString();
+
+            queryString.Add("query", query);
+            queryString.Add("language", language);
+            queryString.Add("page", page.ToString());
+            queryString.Add("include_adult", includeAdult.ToString());
+            queryString.Add("region", region);
+
+            var searchResultDTO = await GetSearchResultAsync("search/person", queryString);
+
+            var persons = new List<Person>();
+
+            if (searchResultDTO.Results != null)
+            {
+                foreach (var searchResult in searchResultDTO.Results)
+                {
+                    var person = SearchResultFactory.CreatePerson(searchResult);
+
+                    if (searchResult.KnowFor != null)
+                    {
+                        foreach (var knowForItem in searchResult.KnowFor)
+                        {
+                            switch (knowForItem.MediaType)
+                            {
+                                case Model.MediaType.Movie:
+                                    person.AddKnowForMovie(SearchResultFactory.CreateMovie(searchResult));
+                                    break;
+
+                                case Model.MediaType.Tv:
+                                    person.AddKnowForTvShow(SearchResultFactory.CreateTvShow(searchResult));
+                                    break;
+                            }
+                        }
+                    }
+
+                    persons.Add(person);
+                }
+            }
+
+            return new SearchResult<IList<Person>>(persons, searchResultDTO.Page,
+                searchResultDTO.TotalResults, searchResultDTO.TotalPages);
+        }
+
+        public async Task<SearchResult<MultiSearch>> MultiSearchAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
+        {
+            var queryString = CreateQueryString();
+
+            queryString.Add("query", query);
+            queryString.Add("language", language);
+            queryString.Add("page", page.ToString());
+            queryString.Add("include_adult", includeAdult.ToString());
+            queryString.Add("region", region);
+
+            var searchResultDTO = await GetSearchResultAsync("search/multi", queryString);
+
+            var multiSearch = new MultiSearch();
+
+            if (searchResultDTO.Results != null)
+            {
+                foreach (var searchResult in searchResultDTO.Results)
+                {
+                    switch (searchResult.MediaType)
+                    {
+                        case Model.MediaType.Movie:
+                            multiSearch.AddMovie(SearchResultFactory.CreateMovie(searchResult));
+                            break;
+
+                        case Model.MediaType.Person:
+                            multiSearch.AddPerson(SearchResultFactory.CreatePerson(searchResult));
+                            break;
+
+                        case Model.MediaType.Tv:
+                            multiSearch.AddTvShow(SearchResultFactory.CreateTvShow(searchResult));
+                            break;
+                    }
+                }
+            }
+
+            return new SearchResult<MultiSearch>(multiSearch, searchResultDTO.Page,
+                searchResultDTO.TotalResults, searchResultDTO.TotalPages);
+        }
+
+        private async Task<SearchResultDTO> GetSearchResultAsync(string path, NameValueCollection queryString)
+        {
             var client = httpConnection.GetClient();
 
-            var response = await client.GetAsync(finalPath);
+            var response = await client.GetAsync(path);
 
             var content = await response.Content.ReadAsStringAsync();
 
             switch (response.StatusCode)
             {
                 case HttpStatusCode.OK:
-
-                    var searchResultDTO = JsonConvert.DeserializeObject<SearchResultDTO>(content);
-
-                    var movies = CreateMoviesFromSearchResult(searchResultDTO.Results);
-
-                    var searchResult = new SearchResult<IList<Movie>>(movies,
-                        searchResultDTO.Page, searchResultDTO.TotalResults, searchResultDTO.TotalPages);
-
-                    return searchResult;
+                    return JsonConvert.DeserializeObject<SearchResultDTO>(content);
                 case HttpStatusCode.BadRequest:
                 case HttpStatusCode.Unauthorized:
                     var error = JsonConvert.DeserializeObject<ErrorResponse>(content);
