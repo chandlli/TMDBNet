@@ -34,16 +34,7 @@ namespace TMDBNet.Implementations
 
             var searchResultDTO = await GetSearchResultAsync("search/movie", queryString);
 
-            var movies = new List<Movie>();
-
-            if (searchResultDTO.Results != null)
-            {
-                foreach (var searchResult in searchResultDTO.Results)
-                    movies.Add(SearchResultFactory.CreateMovie(searchResult));
-            }
-
-            return new SearchResult<IList<Movie>>(movies, searchResultDTO.Page,
-                searchResultDTO.TotalResults, searchResultDTO.TotalPages);
+            return SearchResultFactory.CreateMovieSearchResult(searchResultDTO);
         }
 
         public async Task<SearchResult<IList<TvShow>>> TvShowAsync(string query, string language = null, int page = 1, int? firstAirDateYear = null)
@@ -57,19 +48,10 @@ namespace TMDBNet.Implementations
 
             var searchResultDTO = await GetSearchResultAsync("search/tv", queryString);
 
-            var tvShows = new List<TvShow>();
-
-            if (searchResultDTO.Results != null)
-            {
-                foreach (var searchResult in searchResultDTO.Results)
-                    tvShows.Add(SearchResultFactory.CreateTvShow(searchResult));
-            }
-
-            return new SearchResult<IList<TvShow>>(tvShows, searchResultDTO.Page,
-                searchResultDTO.TotalResults, searchResultDTO.TotalPages);
+            return SearchResultFactory.CreateTvShowSearchResult(searchResultDTO);
         }
 
-        public async Task<SearchResult<IList<Person>>> PersonAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
+        public async Task<SearchResult<IList<People>>> PeopleAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
         {
             var queryString = CreateQueryString();
 
@@ -81,37 +63,7 @@ namespace TMDBNet.Implementations
 
             var searchResultDTO = await GetSearchResultAsync("search/person", queryString);
 
-            var persons = new List<Person>();
-
-            if (searchResultDTO.Results != null)
-            {
-                foreach (var searchResult in searchResultDTO.Results)
-                {
-                    var person = SearchResultFactory.CreatePerson(searchResult);
-
-                    if (searchResult.KnowFor != null)
-                    {
-                        foreach (var knowForItem in searchResult.KnowFor)
-                        {
-                            switch (knowForItem.MediaType)
-                            {
-                                case Model.MediaType.Movie:
-                                    person.AddKnowForMovie(SearchResultFactory.CreateMovie(searchResult));
-                                    break;
-
-                                case Model.MediaType.Tv:
-                                    person.AddKnowForTvShow(SearchResultFactory.CreateTvShow(searchResult));
-                                    break;
-                            }
-                        }
-                    }
-
-                    persons.Add(person);
-                }
-            }
-
-            return new SearchResult<IList<Person>>(persons, searchResultDTO.Page,
-                searchResultDTO.TotalResults, searchResultDTO.TotalPages);
+            return SearchResultFactory.CreatePeopleSearchResult(searchResultDTO);
         }
 
         public async Task<SearchResult<MultiSearch>> MultiSearchAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
@@ -126,31 +78,7 @@ namespace TMDBNet.Implementations
 
             var searchResultDTO = await GetSearchResultAsync("search/multi", queryString);
 
-            var multiSearch = new MultiSearch();
-
-            if (searchResultDTO.Results != null)
-            {
-                foreach (var searchResult in searchResultDTO.Results)
-                {
-                    switch (searchResult.MediaType)
-                    {
-                        case Model.MediaType.Movie:
-                            multiSearch.AddMovie(SearchResultFactory.CreateMovie(searchResult));
-                            break;
-
-                        case Model.MediaType.Person:
-                            multiSearch.AddPerson(SearchResultFactory.CreatePerson(searchResult));
-                            break;
-
-                        case Model.MediaType.Tv:
-                            multiSearch.AddTvShow(SearchResultFactory.CreateTvShow(searchResult));
-                            break;
-                    }
-                }
-            }
-
-            return new SearchResult<MultiSearch>(multiSearch, searchResultDTO.Page,
-                searchResultDTO.TotalResults, searchResultDTO.TotalPages);
+            return SearchResultFactory.CreateMultiSearchResult(searchResultDTO);
         }
 
         private async Task<SearchResultDTO> GetSearchResultAsync(string path, NameValueCollection queryString)
@@ -172,19 +100,6 @@ namespace TMDBNet.Implementations
                 default:
                     throw new Exception("Error on server");
             }
-        }
-
-        private IList<Movie> CreateMoviesFromSearchResult(IList<SearchResultItemDTO> searchResults)
-        {
-            var movies = new List<Movie>();
-
-            if (searchResults == null)
-                return movies;
-
-            foreach (var searchResult in searchResults)
-                movies.Add(SearchResultFactory.CreateMovie(searchResult));
-
-            return movies;
         }
 
         private NameValueCollection CreateQueryString()

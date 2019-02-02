@@ -1,11 +1,96 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
+[assembly: InternalsVisibleTo("TMDBNet.Tests")]
 namespace TMDBNet.Model.Search
 {
     internal static class SearchResultFactory
     {
+        internal static SearchResult<IList<Movie>> CreateMovieSearchResult(SearchResultDTO searchResultDTO)
+        {
+            if (searchResultDTO == null)
+                return null;
+
+            searchResultDTO.Results = searchResultDTO.Results ?? Array.Empty<SearchResultItemDTO>();
+
+            var movies = new List<Movie>();
+
+            foreach (var serachResultItem in searchResultDTO.Results)
+            {
+                movies.Add(CreateMovie(serachResultItem));
+            }
+
+            return new SearchResult<IList<Movie>>(movies, searchResultDTO.Page, searchResultDTO.TotalResults
+                , searchResultDTO.TotalPages);
+        }
+
+        internal static SearchResult<IList<People>> CreatePeopleSearchResult(SearchResultDTO searchResultDTO)
+        {
+            if (searchResultDTO == null)
+                return null;
+
+            searchResultDTO.Results = searchResultDTO.Results ?? Array.Empty<SearchResultItemDTO>();
+
+            var people = new List<People>();
+
+            foreach (var serachResultItem in searchResultDTO.Results)
+            {
+                people.Add(CreatePeople(serachResultItem));
+            }
+
+            return new SearchResult<IList<People>>(people, searchResultDTO.Page, searchResultDTO.TotalResults
+                , searchResultDTO.TotalPages);
+        }
+
+        internal static SearchResult<IList<TvShow>> CreateTvShowSearchResult(SearchResultDTO searchResultDTO)
+        {
+            if (searchResultDTO == null)
+                return null;
+
+            searchResultDTO.Results = searchResultDTO.Results ?? Array.Empty<SearchResultItemDTO>();
+
+            var tvShows = new List<TvShow>();
+
+            foreach (var serachResultItem in searchResultDTO.Results)
+            {
+                tvShows.Add(CreateTvShow(serachResultItem));
+            }
+
+            return new SearchResult<IList<TvShow>>(tvShows, searchResultDTO.Page, searchResultDTO.TotalResults
+                , searchResultDTO.TotalPages);
+        }
+
+        internal static SearchResult<MultiSearch> CreateMultiSearchResult(SearchResultDTO searchResult)
+        {
+            var multiSearch = new MultiSearch();
+
+            searchResult.Results = searchResult.Results ?? Array.Empty<SearchResultItemDTO>();
+
+            foreach (var searchResultItem in searchResult.Results)
+            {
+                switch (searchResultItem.MediaType)
+                {
+                    case Model.MediaType.Movie:
+                        multiSearch.AddMovie(CreateMovie(searchResultItem));
+                        break;
+
+                    case Model.MediaType.People:
+                        multiSearch.AddPeople(CreatePeople(searchResultItem));
+                        break;
+
+                    case Model.MediaType.Tv:
+                        multiSearch.AddTvShow(CreateTvShow(searchResultItem));
+                        break;
+                }
+            }
+
+            return new SearchResult<MultiSearch>(multiSearch, searchResult.Page, searchResult.TotalResults
+                , searchResult.TotalPages);
+        }
+
         internal static Movie CreateMovie(SearchResultItemDTO searchResultDTO)
         {
             return new Movie(
@@ -28,12 +113,48 @@ namespace TMDBNet.Model.Search
 
         internal static TvShow CreateTvShow(SearchResultItemDTO searchResultDTO)
         {
-            return new TvShow();
+            return new TvShow(
+                posterPath: searchResultDTO.PosterPath,
+                overview: searchResultDTO.Overview,
+                genresId: searchResultDTO.GenresId,
+                id: searchResultDTO.Id,
+                originalLanguage: searchResultDTO.OriginalLanguage,
+                backdropPath: searchResultDTO.BackdropPath,
+                popularity: searchResultDTO.Popularity,
+                voteCount: searchResultDTO.VoteCount,
+                voteAverage: searchResultDTO.VoteAverage,
+                firstAirDate: searchResultDTO.FirstAirDate,
+                originalCountry: searchResultDTO.OriginalCountry,
+                name: searchResultDTO.Name,
+                originalName: searchResultDTO.OriginalName
+                );
         }
 
-        internal static Person CreatePerson(SearchResultItemDTO searchResultDTO)
+        internal static People CreatePeople(SearchResultItemDTO searchResultItemDTO)
         {
-            return new Person();
+            var people = new People(
+                profilePath: searchResultItemDTO.ProfilePath,
+                isAdult: searchResultItemDTO.IsAdult,
+                id: searchResultItemDTO.Id,
+                name: searchResultItemDTO.Name,
+                popularity: searchResultItemDTO.Popularity);
+
+            if (searchResultItemDTO.KnownFor != null)
+            {
+                foreach (var knownForItem in searchResultItemDTO.KnownFor)
+                {
+                    if (knownForItem.MediaType == MediaType.Movie)
+                    {
+                        people.AddKnownForMovie(CreateMovie(knownForItem));
+                    }
+                    else if (knownForItem.MediaType == MediaType.Tv)
+                    {
+                        people.AddKnownForTvShow(CreateTvShow(knownForItem));
+                    }
+                }
+            }
+
+            return people;
         }
     }
 }

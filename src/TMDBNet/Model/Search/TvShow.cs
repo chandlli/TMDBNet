@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace TMDBNet.Model.Search
@@ -11,29 +12,43 @@ namespace TMDBNet.Model.Search
         public IList<string> OriginalCountry { get; private set; }
         public string Name { get; private set; }
         public string OriginalName { get; private set; }
-        public string ProfilePath { get; private set; }
 
         public TvShow(int? id = null, string posterPath = null, string overview = null, string originalLanguage = null, string backdropPath = null, string firstAirDate = null,
-            string name = null, string originalName = null, string profilePath = null, decimal? popularity = null, int? voteCount = null, decimal? voteAverage = null, bool? isAdult = null)
-            : base(posterPath, overview, originalLanguage, backdropPath, popularity, voteCount, voteAverage, id, isAdult)
+            string name = null, string originalName = null, decimal? popularity = null, int? voteCount = null, decimal? voteAverage = null, IList<int> genresId = null, IList<string> originalCountry = null)
+            : base(posterPath, overview, originalLanguage, backdropPath, popularity, voteCount, voteAverage, id, genresId)
         {
-            OriginalCountry = new List<string>();
-
+            OriginalCountry = originalCountry;
             FirstAirDate = firstAirDate;
             Name = name;
             OriginalName = originalName;
-            ProfilePath = profilePath;
         }
 
-        internal void AddOriginalCountry(string originalCountry)
+        public override bool Equals(object obj)
         {
-            OriginalCountry.Add(originalCountry);
+            if (obj == null)
+                return false;
+
+            if (obj.GetType() != GetType())
+                return false;
+
+            var tvShow = (TvShow)obj;
+
+            return tvShow.OriginalCountry.SequenceEqual(OriginalCountry) &&
+                tvShow.FirstAirDate.Equals(FirstAirDate) &&
+                tvShow.Name.Equals(Name) &&
+                tvShow.OriginalName.Equals(OriginalName) &&
+                base.Equals(tvShow);
         }
 
-        internal void AddOriginalCountryRange(IList<string> originalCountryRange)
+        public override int GetHashCode()
         {
-            foreach (var originalCountry in originalCountryRange)
-                OriginalCountry.Add(originalCountry);
+            var hashCode = 891511721;
+            hashCode = hashCode * -1521134295 + base.GetHashCode();
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FirstAirDate);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IList<string>>.Default.GetHashCode(OriginalCountry);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(OriginalName);
+            return hashCode;
         }
     }
 }

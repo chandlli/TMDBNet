@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
-using ThemovieDB.Net.Model;
+using TMDBNet.Model;
 
 namespace TMDBNet
 {

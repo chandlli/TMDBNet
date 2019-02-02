@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace TMDBNet.Model.Search
@@ -16,10 +17,9 @@ namespace TMDBNet.Model.Search
         public decimal? Popularity { get; private set; }
         public int? VoteCount { get; private set; }
         public decimal? VoteAverage { get; private set; }
-        public bool? IsAdult { get; private set; }
 
         public Media(string posterPath = null, string overview = null, string originalLanguage = null, string backdropPath = null, decimal? popularity = null, int? voteCount = null,
-            decimal? voteAverage = null, int? id = null, bool? isAdult = null, IList<int> genresId = null)
+            decimal? voteAverage = null, int? id = null, IList<int> genresId = null)
         {
             PosterPath = posterPath;
             Overview = overview;
@@ -29,8 +29,43 @@ namespace TMDBNet.Model.Search
             Popularity = popularity;
             VoteCount = voteCount;
             VoteAverage = voteAverage;
-            IsAdult = isAdult;
             GenresId = genresId;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj.GetType() != GetType())
+                return false;
+
+            var media = (Media)obj;
+
+            return media.BackdropPath.Equals(BackdropPath) &&
+                media.GenresId.SequenceEqual(GenresId) &&
+                media.Id.Equals(Id) &&
+                media.OriginalLanguage.Equals(OriginalLanguage) &&
+                media.Overview.Equals(Overview) &&
+                media.Popularity.Equals(Popularity) &&
+                media.PosterPath.Equals(PosterPath) &&
+                media.VoteAverage.Equals(VoteAverage) &&
+                media.VoteCount.Equals(VoteCount);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = 159860747;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(PosterPath);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Overview);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IList<int>>.Default.GetHashCode(GenresId);
+            hashCode = hashCode * -1521134295 + EqualityComparer<int?>.Default.GetHashCode(Id);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(OriginalLanguage);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(BackdropPath);
+            hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(Popularity);
+            hashCode = hashCode * -1521134295 + EqualityComparer<int?>.Default.GetHashCode(VoteCount);
+            hashCode = hashCode * -1521134295 + EqualityComparer<decimal?>.Default.GetHashCode(VoteAverage);
+            return hashCode;
         }
     }
 }

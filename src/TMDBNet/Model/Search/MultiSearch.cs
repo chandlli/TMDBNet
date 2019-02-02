@@ -8,13 +8,13 @@ namespace TMDBNet.Model.Search
     public sealed class MultiSearch
     {
         public IList<Movie> Movies { get; private set; }
-        public IList<Person> Persons { get; private set; }
+        public IList<People> People { get; private set; }
         public IList<TvShow> TvShows { get; private set; }
 
         public MultiSearch()
         {
             Movies = new List<Movie>();
-            Persons = new List<Person>();
+            People = new List<People>();
             TvShows = new List<TvShow>();
         }
 
@@ -23,9 +23,9 @@ namespace TMDBNet.Model.Search
             Movies.Add(movie);
         }
 
-        internal void AddPerson(Person person)
+        internal void AddPeople(People people)
         {
-            Persons.Add(person);
+            People.Add(people);
         }
 
         internal void AddTvShow(TvShow tvShow)
