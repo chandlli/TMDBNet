@@ -19,6 +19,7 @@ namespace TMDBNet.Tests.Search
         private readonly SearchResultDTO allMovieProperties;
         private readonly SearchResultDTO allTvShowProperties;
         private readonly SearchResultDTO allPeopleProperties;
+        private readonly SearchResultDTO allMultiSearchProperties;
 
         public AllPropertiesTest()
         {
@@ -168,6 +169,115 @@ namespace TMDBNet.Tests.Search
                 TotalResults = 1,
                 TotalPages = 1
             };
+
+            allMultiSearchProperties = new SearchResultDTO()
+            {
+                Page = 1,
+                TotalPages = 1,
+                TotalResults = 3,
+                Results = new SearchResultItemDTO[]
+                {
+                    new SearchResultItemDTO()
+                    {
+                        PosterPath = "/dl4ftVOH532YmV1I9jOLYwexv2F.jpg",
+                        Popularity = 1,
+                        Id = 19532,
+                        Overview = "The Mrs Bradley Mysteries is a 1998-99 British drama series starring Diana Rigg as Adela Bradley, and Neil Dudgeon as her chauffeur George Moody. The series was produced by the BBC for its BBC One channel, based on the character created by detective writer Gladys Mitchell. Five episodes were produced, including a pilot special. Graham Dalby provided the theme music You're the Cream in My Coffee and he appeared with his orchestra in two episodes. Stylish images of the 1920s are featured, including a classic Rolls Royce limousine and art deco fashions and jewellery worn by the title character.\n\nThe series was shown in the United States by PBS broadcaster WGBH as part of its Mystery! anthology strand, and introduced by Diana Rigg. The full series was also aired in Australia in 2011 by the Seven Network's station 7Two.",
+                        BackdropPath = "/lHebXNadF0WDJWTxO4Zud3xM8he.jpg",
+                        VoteAverage = 0,
+                        MediaType = Model.MediaType.Tv,
+                        FirstAirDate = "10-10-2012",
+                        OriginalCountry = new string[]
+                        {
+                            "en"
+                        },
+                        GenresId = new int[]
+                        {
+                            18
+                        },
+                        OriginalLanguage = "en",
+                        VoteCount = 2,
+                        Name = "The Mrs Bradley Mysteries",
+                        OriginalName =  "The Mrs Bradley Mysteries"
+                    },
+                    new SearchResultItemDTO()
+                    {
+                        PosterPath = "/jksXcyWURdXMcGgShL0aMSR7g8d.jpg",
+                        IsAdult = false,
+                        Overview  ="Bradley vs. Provodnikov for the WBO Welterweight title was fought on March 16th, 2012 at The Home Depot Center in Carson, California, USA.",
+                        ReleaseDate = "2013-03-16",
+                        OriginalTitle = "Bradley vs. Provodnikov",
+                        GenresId = new int[]
+                        {
+                            1
+                        },
+                        Id = 179821,
+                        MediaType = Model.MediaType.Movie,
+                        OriginalLanguage = "en",
+                        Title = "Bradley vs. Provodnikov",
+                        BackdropPath = "/jzqQCuTQyZAglGMTV8fSE3HKpma.jpg",
+                        Popularity = 1.001714m,
+                        VoteCount = 1,
+                        Video = true,
+                        VoteAverage = 2
+                    },
+                    new SearchResultItemDTO()
+                    {
+                        ProfilePath = "/2daC5DeXqwkFND0xxutbnSVKN6c.jpg",
+                        IsAdult = false,
+                        Id = 51329,
+                        MediaType = Model.MediaType.People,
+                        KnownFor = new SearchResultItemDTO[]
+                        {
+                            new SearchResultItemDTO()
+                            {
+                                PosterPath =  "/y31QB9kn3XSudA15tV7UWQ9XLuW.jpg",
+                                IsAdult = false,
+                                Overview = "Light years from Earth, 26 years after being abducted, Peter Quill finds himself the prime target of a manhunt after discovering an orb wanted by Ronan the Accuser.",
+                                ReleaseDate = "2014-07-30",
+                                OriginalTitle = "Guardians of the Galaxy",
+                                GenresId = new int[] {
+                                    28,878,12
+                                },
+                                Id = 118340,
+                                MediaType = Model.MediaType.Movie,
+                                OriginalLanguage =  "en",
+                                Title =  "Guardians of the Galaxy",
+                                BackdropPath = "/bHarw8xrmQeqf3t8HpuMY7zoK4x.jpg",
+                                Popularity = 9.267731m,
+                                VoteCount = 5002,
+                                Video = false,
+                                VoteAverage = 7.97m
+                            },
+                            new SearchResultItemDTO()
+                            {
+                                PosterPath = "/dl4ftVOH532YmV1I9jOLYwexv2F.jpg",
+                                Popularity = 1,
+                                Id = 19532,
+                                Overview = "The Mrs Bradley Mysteries is a 1998-99 British drama series starring Diana Rigg as Adela Bradley, and Neil Dudgeon as her chauffeur George Moody. The series was produced by the BBC for its BBC One channel, based on the character created by detective writer Gladys Mitchell. Five episodes were produced, including a pilot special. Graham Dalby provided the theme music You're the Cream in My Coffee and he appeared with his orchestra in two episodes. Stylish images of the 1920s are featured, including a classic Rolls Royce limousine and art deco fashions and jewellery worn by the title character.\n\nThe series was shown in the United States by PBS broadcaster WGBH as part of its Mystery! anthology strand, and introduced by Diana Rigg. The full series was also aired in Australia in 2011 by the Seven Network's station 7Two.",
+                                BackdropPath = "/lHebXNadF0WDJWTxO4Zud3xM8he.jpg",
+                                VoteAverage = 0,
+                                MediaType = Model.MediaType.Tv,
+                                FirstAirDate = "10-10-2012",
+                                OriginalCountry = new string[]
+                                {
+                                    "en"
+                                },
+                                GenresId = new int[]
+                                {
+                                    18
+                                },
+                                OriginalLanguage = "en",
+                                VoteCount = 2,
+                                Name = "The Mrs Bradley Mysteries",
+                                OriginalName =  "The Mrs Bradley Mysteries"
+                            }
+                        },
+                        Name = "David Bradley",
+                        Popularity = 2.62283m
+                    }
+                }
+            };
         }
 
         [Fact]
@@ -224,7 +334,7 @@ namespace TMDBNet.Tests.Search
                 var expectedTvShow = SearchResultFactory.CreateTvShow(
                     allTvShowProperties.Results[index]);
 
-               tvShow.ShouldBe(expectedTvShow);
+                tvShow.ShouldBe(expectedTvShow);
             }
         }
 
@@ -254,6 +364,30 @@ namespace TMDBNet.Tests.Search
 
                 people.ShouldBe(expectedPeople);
             }
+        }
+
+        [Fact]
+        public async Task MultiSearch()
+        {
+            var handlerMock = HttpMockFactory.CreateMock(new HttpResponseMessage()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(JsonConvert.SerializeObject(allMultiSearchProperties))
+            });
+
+            var httpConnection = new HttpConnection(handlerMock.Object);
+
+            var search = new TMDBNet.Implementations.Search("", httpConnection);
+
+            var result = await search.MultiSearchAsync("Bradley");
+
+            result.ShouldNotBeNull();
+            result.Results.ShouldNotBeNull();
+
+            var expected = SearchResultFactory.CreateMultiSearch(allMultiSearchProperties);
+            var actual = result.Results;
+
+            actual.ShouldBe(expected);
         }
     }
 }

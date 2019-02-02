@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace TMDBNet.Model.Search
@@ -31,6 +32,30 @@ namespace TMDBNet.Model.Search
         internal void AddTvShow(TvShow tvShow)
         {
             TvShows.Add(tvShow);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            if (obj.GetType() != GetType())
+                return false;
+
+            var multisearch = (MultiSearch)obj;
+
+            return multisearch.Movies.SequenceEqual(Movies) &&
+                multisearch.TvShows.SequenceEqual(TvShows) &&
+                multisearch.People.SequenceEqual(People);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -396937003;
+            hashCode = hashCode * -1521134295 + EqualityComparer<IList<Movie>>.Default.GetHashCode(Movies);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IList<People>>.Default.GetHashCode(People);
+            hashCode = hashCode * -1521134295 + EqualityComparer<IList<TvShow>>.Default.GetHashCode(TvShows);
+            return hashCode;
         }
     }
 }

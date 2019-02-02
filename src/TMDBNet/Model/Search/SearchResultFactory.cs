@@ -65,27 +65,7 @@ namespace TMDBNet.Model.Search
 
         internal static SearchResult<MultiSearch> CreateMultiSearchResult(SearchResultDTO searchResult)
         {
-            var multiSearch = new MultiSearch();
-
-            searchResult.Results = searchResult.Results ?? Array.Empty<SearchResultItemDTO>();
-
-            foreach (var searchResultItem in searchResult.Results)
-            {
-                switch (searchResultItem.MediaType)
-                {
-                    case Model.MediaType.Movie:
-                        multiSearch.AddMovie(CreateMovie(searchResultItem));
-                        break;
-
-                    case Model.MediaType.People:
-                        multiSearch.AddPeople(CreatePeople(searchResultItem));
-                        break;
-
-                    case Model.MediaType.Tv:
-                        multiSearch.AddTvShow(CreateTvShow(searchResultItem));
-                        break;
-                }
-            }
+            var multiSearch = CreateMultiSearch(searchResult);
 
             return new SearchResult<MultiSearch>(multiSearch, searchResult.Page, searchResult.TotalResults
                 , searchResult.TotalPages);
@@ -155,6 +135,33 @@ namespace TMDBNet.Model.Search
             }
 
             return people;
+        }
+
+        internal static MultiSearch CreateMultiSearch(SearchResultDTO searchResult)
+        {
+            var multiSearch = new MultiSearch();
+
+            searchResult.Results = searchResult.Results ?? Array.Empty<SearchResultItemDTO>();
+
+            foreach (var searchResultItem in searchResult.Results)
+            {
+                switch (searchResultItem.MediaType)
+                {
+                    case Model.MediaType.Movie:
+                        multiSearch.AddMovie(CreateMovie(searchResultItem));
+                        break;
+
+                    case Model.MediaType.People:
+                        multiSearch.AddPeople(CreatePeople(searchResultItem));
+                        break;
+
+                    case Model.MediaType.Tv:
+                        multiSearch.AddTvShow(CreateTvShow(searchResultItem));
+                        break;
+                }
+            }
+
+            return multiSearch;
         }
     }
 }
