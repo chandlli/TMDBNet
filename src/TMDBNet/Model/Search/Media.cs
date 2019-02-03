@@ -42,15 +42,15 @@ namespace TMDBNet.Model.Search
 
             var media = (Media)obj;
 
-            return media.BackdropPath.Equals(BackdropPath) &&
+            return string.Equals(media.BackdropPath, BackdropPath) &&
                 media.GenresId.SequenceEqual(GenresId) &&
-                media.Id.Equals(Id) &&
-                media.OriginalLanguage.Equals(OriginalLanguage) &&
-                media.Overview.Equals(Overview) &&
-                media.Popularity.Equals(Popularity) &&
-                media.PosterPath.Equals(PosterPath) &&
-                media.VoteAverage.Equals(VoteAverage) &&
-                media.VoteCount.Equals(VoteCount);
+                media.Id == Id &&
+                string.Equals(media.OriginalLanguage, OriginalLanguage) &&
+                string.Equals(media.Overview, Overview) &&
+                media.Popularity == Popularity &&
+                string.Equals(media.PosterPath, PosterPath) &&
+                media.VoteAverage == VoteAverage &&
+                media.VoteCount == VoteCount;
         }
 
         public override int GetHashCode()

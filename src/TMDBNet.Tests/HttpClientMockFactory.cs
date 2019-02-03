@@ -2,7 +2,6 @@
 using Moq.Protected;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -10,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace TMDBNet.Tests
 {
-    public static class HttpMockFactory
+    public static class HttpClientMockFactory
     {
-        public static Mock<HttpMessageHandler> CreateMock(HttpResponseMessage responseMessage)
+        public static HttpClient CreateClient(HttpResponseMessage responseMessage)
         {
             var handlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+
             handlerMock
                .Protected()
                .Setup<Task<HttpResponseMessage>>(
@@ -25,7 +25,10 @@ namespace TMDBNet.Tests
                .ReturnsAsync(responseMessage)
                .Verifiable();
 
-            return handlerMock;
+            var httpClient = new HttpClient(handlerMock.Object);
+            httpClient.BaseAddress = new Uri("https://api.themoviedb.org/3/");
+
+            return httpClient;
         }
     }
 }

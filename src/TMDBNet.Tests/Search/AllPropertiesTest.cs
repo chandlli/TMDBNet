@@ -283,15 +283,13 @@ namespace TMDBNet.Tests.Search
         [Fact]
         public async Task Movies()
         {
-            var handlerMock = HttpMockFactory.CreateMock(new HttpResponseMessage()
+            var httpClient = HttpClientMockFactory.CreateClient(new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(JsonConvert.SerializeObject(allMovieProperties))
             });
 
-            var httpConnection = new HttpConnection(handlerMock.Object);
-
-            var search = new TMDBNet.Implementations.Search("", httpConnection);
+            var search = new TMDBNet.Implementations.Search("", httpClient);
 
             var result = await search.MovieAsync("avengers");
 
@@ -312,15 +310,13 @@ namespace TMDBNet.Tests.Search
         [Fact]
         public async Task TvShow()
         {
-            var handlerMock = HttpMockFactory.CreateMock(new HttpResponseMessage()
+            var httpClient = HttpClientMockFactory.CreateClient(new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(JsonConvert.SerializeObject(allTvShowProperties))
             });
 
-            var httpConnection = new HttpConnection(handlerMock.Object);
-
-            var search = new TMDBNet.Implementations.Search("", httpConnection);
+            var search = new TMDBNet.Implementations.Search("", httpClient);
 
             var result = await search.TvShowAsync("Game of thrones");
 
@@ -341,15 +337,13 @@ namespace TMDBNet.Tests.Search
         [Fact]
         public async Task People()
         {
-            var handlerMock = HttpMockFactory.CreateMock(new HttpResponseMessage()
+            var httpClient = HttpClientMockFactory.CreateClient(new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(JsonConvert.SerializeObject(allPeopleProperties))
             });
 
-            var httpConnection = new HttpConnection(handlerMock.Object);
-
-            var search = new TMDBNet.Implementations.Search("", httpConnection);
+            var search = new TMDBNet.Implementations.Search("", httpClient);
 
             var result = await search.PeopleAsync("Bradley");
 
@@ -369,15 +363,13 @@ namespace TMDBNet.Tests.Search
         [Fact]
         public async Task MultiSearch()
         {
-            var handlerMock = HttpMockFactory.CreateMock(new HttpResponseMessage()
+            var httpClient = HttpClientMockFactory.CreateClient(new HttpResponseMessage()
             {
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(JsonConvert.SerializeObject(allMultiSearchProperties))
             });
 
-            var httpConnection = new HttpConnection(handlerMock.Object);
-
-            var search = new TMDBNet.Implementations.Search("", httpConnection);
+            var search = new TMDBNet.Implementations.Search("", httpClient);
 
             var result = await search.MultiSearchAsync("Bradley");
 

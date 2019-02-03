@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -14,12 +15,12 @@ namespace TMDBNet.Implementations
     public sealed class Search : ISearch
     {
         private readonly string apiKey;
-        private readonly HttpConnection httpConnection;
+        private readonly HttpClient httpClient;
 
-        public Search(string apiKey, HttpConnection httpConnection)
+        public Search(string apiKey, HttpClient httpClient)
         {
             this.apiKey = apiKey;
-            this.httpConnection = httpConnection;
+            this.httpClient = httpClient;
         }
 
         public async Task<SearchResult<IList<Movie>>> MovieAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null, int? year = null, int? primaryReleaseYear = null)
@@ -83,9 +84,7 @@ namespace TMDBNet.Implementations
 
         private async Task<SearchResultDTO> GetSearchResultAsync(string path, NameValueCollection queryString)
         {
-            var client = httpConnection.GetClient();
-
-            var response = await client.GetAsync(path);
+            var response = await httpClient.GetAsync(path);
 
             var content = await response.Content.ReadAsStringAsync();
 

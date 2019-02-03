@@ -35,9 +35,9 @@ namespace TMDBNet.Model.Search
 
             var movie = (Movie)obj;
 
-            return movie.Title.Equals(Title) &&
-                movie.OriginalTitle.Equals(OriginalTitle) &&
-                movie.ReleaseDate.Equals(ReleaseDate) &&
+            return string.Equals(movie.Title, Title) &&
+                string.Equals(movie.OriginalTitle, OriginalTitle) &&
+                string.Equals(movie.ReleaseDate, ReleaseDate) &&
                 movie.Video.Equals(Video) &&
                 movie.IsAdult.Equals(IsAdult) &&
                 base.Equals(movie);
