@@ -82,6 +82,43 @@ namespace TMDBNet.Implementations
             return SearchResultFactory.CreateMultiSearchResult(searchResultDTO);
         }
 
+        public async Task<SearchResult<IList<KeyWord>>> KeyWordAsync(string query, int page = 1)
+        {
+            var queryString = CreateQueryString();
+
+            queryString.Add("query", query);
+            queryString.Add("page", page.ToString());
+
+            var searchResultDTO = await GetSearchResultAsync("search/keyword", queryString);
+
+            return SearchResultFactory.CreateKeyWordSearchResult(searchResultDTO);
+        }
+
+        public async Task<SearchResult<IList<Collection>>> CollectionAsync(string query, string language = null, int page = 1)
+        {
+            var queryString = CreateQueryString();
+
+            queryString.Add("query", query);
+            queryString.Add("language", language);
+            queryString.Add("page", page.ToString());
+
+            var searchResultDTO = await GetSearchResultAsync("search/collection", queryString);
+
+            return SearchResultFactory.CreateCollectionSearchResult(searchResultDTO);
+        }
+
+        public async Task<SearchResult<IList<Company>>> CompaniesAsync(string query, int page = 1)
+        {
+            var queryString = CreateQueryString();
+
+            queryString.Add("query", query);
+            queryString.Add("page", page.ToString());
+
+            var searchResultDTO = await GetSearchResultAsync("search/company", queryString);
+
+            return SearchResultFactory.CreateCompanySearchResult(searchResultDTO);
+        }
+
         private async Task<SearchResultDTO> GetSearchResultAsync(string path, NameValueCollection queryString)
         {
             var response = await httpClient.GetAsync(path);

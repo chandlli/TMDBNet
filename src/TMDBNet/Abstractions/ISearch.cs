@@ -55,5 +55,30 @@ namespace TMDBNet.Abstractions
         /// <param name="region"></param>
         /// <returns></returns>
         Task<SearchResult<IList<People>>> PeopleAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        Task<SearchResult<IList<KeyWord>>> KeyWordAsync(string query, int page = 1);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="language"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        Task<SearchResult<IList<Collection>>> CollectionAsync(string query, string language = null, int page = 1);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        Task<SearchResult<IList<Company>>> CompaniesAsync(string query, int page = 1);
     }
 }

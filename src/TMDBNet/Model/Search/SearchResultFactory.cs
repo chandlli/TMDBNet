@@ -71,6 +71,66 @@ namespace TMDBNet.Model.Search
                 , searchResult.TotalPages);
         }
 
+        internal static SearchResult<IList<KeyWord>> CreateKeyWordSearchResult(SearchResultDTO searchResultDTO)
+        {
+            if (searchResultDTO == null)
+                return null;
+
+            searchResultDTO.Results = searchResultDTO.Results ?? Array.Empty<SearchResultItemDTO>();
+
+            var keyWords = new List<KeyWord>();
+
+            foreach (var serachResultItem in searchResultDTO.Results)
+            {
+                keyWords.Add(CreateKeyWord(serachResultItem));
+            }
+
+            return new SearchResult<IList<KeyWord>>(keyWords, searchResultDTO.Page, searchResultDTO.TotalResults
+                , searchResultDTO.TotalPages);
+        }
+
+        internal static SearchResult<IList<Collection>> CreateCollectionSearchResult(SearchResultDTO searchResultDTO)
+        {
+            if (searchResultDTO == null)
+                return null;
+
+            searchResultDTO.Results = searchResultDTO.Results ?? Array.Empty<SearchResultItemDTO>();
+
+            var collections = new List<Collection>();
+
+            foreach (var serachResultItem in searchResultDTO.Results)
+            {
+                collections.Add(CreateCollection(serachResultItem));
+            }
+
+            return new SearchResult<IList<Collection>>(collections, searchResultDTO.Page, searchResultDTO.TotalResults
+                , searchResultDTO.TotalPages);
+        }
+
+        internal static Collection CreateCollection(SearchResultItemDTO searchResultItem)
+        {
+            return new Collection(searchResultItem.Id.Value, searchResultItem.BackdropPath,
+                searchResultItem.Name, searchResultItem.PosterPath);
+        }
+
+        internal static SearchResult<IList<Company>> CreateCompanySearchResult(SearchResultDTO searchResultDTO)
+        {
+            if (searchResultDTO == null)
+                return null;
+
+            searchResultDTO.Results = searchResultDTO.Results ?? Array.Empty<SearchResultItemDTO>();
+
+            var companies = new List<Company>();
+
+            foreach (var serachResultItem in searchResultDTO.Results)
+            {
+                companies.Add(CreateCompany(serachResultItem));
+            }
+
+            return new SearchResult<IList<Company>>(companies, searchResultDTO.Page, searchResultDTO.TotalResults
+                , searchResultDTO.TotalPages);
+        }
+
         internal static Movie CreateMovie(SearchResultItemDTO searchResultDTO)
         {
             return new Movie(
@@ -137,13 +197,13 @@ namespace TMDBNet.Model.Search
             return people;
         }
 
-        internal static MultiSearch CreateMultiSearch(SearchResultDTO searchResult)
+        internal static MultiSearch CreateMultiSearch(SearchResultDTO searchResultItemDTO)
         {
             var multiSearch = new MultiSearch();
 
-            searchResult.Results = searchResult.Results ?? Array.Empty<SearchResultItemDTO>();
+            searchResultItemDTO.Results = searchResultItemDTO.Results ?? Array.Empty<SearchResultItemDTO>();
 
-            foreach (var searchResultItem in searchResult.Results)
+            foreach (var searchResultItem in searchResultItemDTO.Results)
             {
                 switch (searchResultItem.MediaType)
                 {
@@ -162,6 +222,16 @@ namespace TMDBNet.Model.Search
             }
 
             return multiSearch;
+        }
+
+        internal static KeyWord CreateKeyWord(SearchResultItemDTO searchResultItemDTO)
+        {
+            return new KeyWord(searchResultItemDTO.Id.Value, searchResultItemDTO.Name);
+        }
+
+        internal static Company CreateCompany(SearchResultItemDTO searchResultItemDTO)
+        {
+            return new Company(searchResultItemDTO.Id.Value, searchResultItemDTO.LogoPath, searchResultItemDTO.Name);
         }
     }
 }

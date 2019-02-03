@@ -69,6 +69,9 @@ namespace TMDBNet.Model.Search
         [JsonProperty("profile_path")]
         public string ProfilePath { get; set; }
 
+        [JsonProperty("logo_path")]
+        public string LogoPath { get; set; }
+
         [JsonProperty("known_for")]
         public IList<SearchResultItemDTO> KnownFor { get; set; }
     }
