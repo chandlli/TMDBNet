@@ -7,17 +7,19 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using TMDBNet.Abstractions;
-using TMDBNet.Model.Search;
+using TMDBNet.Search;
+using TMDBNet.Search.DTO;
+using TMDBNet.Search.Factories;
+using TMDBNet.Search.Model;
 
-namespace TMDBNet.Implementations
+namespace TMDBNet.Search
 {
-    public sealed class Search : ISearch
+    public sealed class SearchApi : ISearchApi
     {
         private readonly string apiKey;
         private readonly HttpClient httpClient;
 
-        public Search(string apiKey, HttpClient httpClient)
+        public SearchApi(string apiKey, HttpClient httpClient)
         {
             this.apiKey = apiKey;
             this.httpClient = httpClient;
@@ -35,7 +37,7 @@ namespace TMDBNet.Implementations
 
             var searchResultDTO = await GetSearchResultAsync("search/movie", queryString);
 
-            return SearchResultFactory.CreateMovieSearchResult(searchResultDTO);
+            return SearchResultFactory.CreateSearchResult<IList<Movie>>(searchResultDTO);
         }
 
         public async Task<SearchResult<IList<TvShow>>> TvShowAsync(string query, string language = null, int page = 1, int? firstAirDateYear = null)
@@ -49,7 +51,7 @@ namespace TMDBNet.Implementations
 
             var searchResultDTO = await GetSearchResultAsync("search/tv", queryString);
 
-            return SearchResultFactory.CreateTvShowSearchResult(searchResultDTO);
+            return SearchResultFactory.CreateSearchResult<IList<TvShow>>(searchResultDTO);
         }
 
         public async Task<SearchResult<IList<People>>> PeopleAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
@@ -64,7 +66,7 @@ namespace TMDBNet.Implementations
 
             var searchResultDTO = await GetSearchResultAsync("search/person", queryString);
 
-            return SearchResultFactory.CreatePeopleSearchResult(searchResultDTO);
+            return SearchResultFactory.CreateSearchResult<IList<People>>(searchResultDTO);
         }
 
         public async Task<SearchResult<MultiSearch>> MultiSearchAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
@@ -79,7 +81,7 @@ namespace TMDBNet.Implementations
 
             var searchResultDTO = await GetSearchResultAsync("search/multi", queryString);
 
-            return SearchResultFactory.CreateMultiSearchResult(searchResultDTO);
+            return SearchResultFactory.CreateSearchResult<MultiSearch>(searchResultDTO);
         }
 
         public async Task<SearchResult<IList<KeyWord>>> KeyWordAsync(string query, int page = 1)
@@ -91,7 +93,7 @@ namespace TMDBNet.Implementations
 
             var searchResultDTO = await GetSearchResultAsync("search/keyword", queryString);
 
-            return SearchResultFactory.CreateKeyWordSearchResult(searchResultDTO);
+            return SearchResultFactory.CreateSearchResult<IList<KeyWord>>(searchResultDTO);
         }
 
         public async Task<SearchResult<IList<Collection>>> CollectionAsync(string query, string language = null, int page = 1)
@@ -104,7 +106,7 @@ namespace TMDBNet.Implementations
 
             var searchResultDTO = await GetSearchResultAsync("search/collection", queryString);
 
-            return SearchResultFactory.CreateCollectionSearchResult(searchResultDTO);
+            return SearchResultFactory.CreateSearchResult<IList<Collection>>(searchResultDTO);
         }
 
         public async Task<SearchResult<IList<Company>>> CompaniesAsync(string query, int page = 1)
@@ -116,7 +118,7 @@ namespace TMDBNet.Implementations
 
             var searchResultDTO = await GetSearchResultAsync("search/company", queryString);
 
-            return SearchResultFactory.CreateCompanySearchResult(searchResultDTO);
+            return SearchResultFactory.CreateSearchResult<IList<Company>>(searchResultDTO);
         }
 
         private async Task<SearchResultDTO> GetSearchResultAsync(string path, NameValueCollection queryString)
@@ -131,7 +133,7 @@ namespace TMDBNet.Implementations
                     return JsonConvert.DeserializeObject<SearchResultDTO>(content);
                 case HttpStatusCode.BadRequest:
                 case HttpStatusCode.Unauthorized:
-                    var error = JsonConvert.DeserializeObject<ErrorResponse>(content);
+                    var error = JsonConvert.DeserializeObject<ErrorResponseDTO>(content);
                     throw new Exception(error.StatusMessage);
                 default:
                     throw new Exception("Error on server");

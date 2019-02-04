@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TMDBNet.Model.Search
+namespace TMDBNet.Search.DTO
 {
-    public sealed class ErrorResponse
+    internal sealed class ErrorResponseDTO
     {
         [JsonProperty("status_message")]
         public string StatusMessage { get; set; }

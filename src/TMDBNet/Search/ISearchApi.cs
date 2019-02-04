@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using TMDBNet.Model.Search;
+using TMDBNet.Abstractions;
+using TMDBNet.Search;
+using TMDBNet.Search.Model;
 
-namespace TMDBNet.Abstractions
+namespace TMDBNet.Search
 {
     /// <summary>
     /// Search interface
     /// </summary>
-    public interface ISearch : IApi
+    public interface ISearchApi : IApi
     {
         /// <summary>
         /// Search multiple models in a single request. Multi search currently supports searching for movies, tv shows and people in a single request.

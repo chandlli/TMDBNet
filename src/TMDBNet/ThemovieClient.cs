@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using TMDBNet.Abstractions;
-using TMDBNet.Implementations;
-using TMDBNet.Model;
+using TMDBNet.Search;
 
 namespace TMDBNet
 {
@@ -35,7 +34,7 @@ namespace TMDBNet
         {
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddHttpClient<ISearch, Search>(client =>
+            serviceCollection.AddHttpClient<ISearchApi, SearchApi>(client =>
             {
                 client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
             });

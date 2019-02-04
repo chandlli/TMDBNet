@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TMDBNet.Model.Search
+namespace TMDBNet.Search.Model
 {
     public sealed class TvShow : Media
     {

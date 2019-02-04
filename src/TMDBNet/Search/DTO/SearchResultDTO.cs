@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TMDBNet.Model.Search
+namespace TMDBNet.Search.DTO
 {
     internal sealed class SearchResultDTO
     {

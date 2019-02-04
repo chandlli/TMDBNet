@@ -6,11 +6,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using TMDBNet.Implementations;
-using TMDBNet.Model.Search;
+using TMDBNet.Search;
 using Xunit;
 using Shouldly;
 using System.Linq;
+using TMDBNet.Search.DTO;
+using TMDBNet.Search.Factories;
+using TMDBNet.Search.Model;
 
 namespace TMDBNet.Tests.Search
 {
@@ -129,7 +131,7 @@ namespace TMDBNet.Tests.Search
                                     28,878,12
                                 },
                                 Id = 118340,
-                                MediaType = Model.MediaType.Movie,
+                                MediaType = MediaType.Movie,
                                 OriginalLanguage = "en",
                                 Title = "Guardians of the Galaxy",
                                 BackdropPath = "/bHarw8xrmQeqf3t8HpuMY7zoK4x.jpg",
@@ -146,7 +148,7 @@ namespace TMDBNet.Tests.Search
                                 Overview = "A medical student who becomes a zombie joins a Coroner's Office in order to gain access to the brains she must reluctantly eat so that she can maintain her humanity. But every brain she eats, she also inherits their memories and must now solve their deaths with help from the Medical examiner and a police detective.",
                                 BackdropPath = "/d2YDPTQPe3mI2LqBWwb0CchN54f.jpg",
                                 VoteAverage = 6.01m,
-                                MediaType = Model.MediaType.Tv,
+                                MediaType = MediaType.Tv,
                                 FirstAirDate = "2015-03-17",
                                 OriginalCountry = new string[]
                                 {
@@ -185,7 +187,7 @@ namespace TMDBNet.Tests.Search
                         Overview = "The Mrs Bradley Mysteries is a 1998-99 British drama series starring Diana Rigg as Adela Bradley, and Neil Dudgeon as her chauffeur George Moody. The series was produced by the BBC for its BBC One channel, based on the character created by detective writer Gladys Mitchell. Five episodes were produced, including a pilot special. Graham Dalby provided the theme music You're the Cream in My Coffee and he appeared with his orchestra in two episodes. Stylish images of the 1920s are featured, including a classic Rolls Royce limousine and art deco fashions and jewellery worn by the title character.\n\nThe series was shown in the United States by PBS broadcaster WGBH as part of its Mystery! anthology strand, and introduced by Diana Rigg. The full series was also aired in Australia in 2011 by the Seven Network's station 7Two.",
                         BackdropPath = "/lHebXNadF0WDJWTxO4Zud3xM8he.jpg",
                         VoteAverage = 0,
-                        MediaType = Model.MediaType.Tv,
+                        MediaType = MediaType.Tv,
                         FirstAirDate = "10-10-2012",
                         OriginalCountry = new string[]
                         {
@@ -212,7 +214,7 @@ namespace TMDBNet.Tests.Search
                             1
                         },
                         Id = 179821,
-                        MediaType = Model.MediaType.Movie,
+                        MediaType = MediaType.Movie,
                         OriginalLanguage = "en",
                         Title = "Bradley vs. Provodnikov",
                         BackdropPath = "/jzqQCuTQyZAglGMTV8fSE3HKpma.jpg",
@@ -226,7 +228,7 @@ namespace TMDBNet.Tests.Search
                         ProfilePath = "/2daC5DeXqwkFND0xxutbnSVKN6c.jpg",
                         IsAdult = false,
                         Id = 51329,
-                        MediaType = Model.MediaType.People,
+                        MediaType = MediaType.People,
                         KnownFor = new SearchResultItemDTO[]
                         {
                             new SearchResultItemDTO()
@@ -240,7 +242,7 @@ namespace TMDBNet.Tests.Search
                                     28,878,12
                                 },
                                 Id = 118340,
-                                MediaType = Model.MediaType.Movie,
+                                MediaType = MediaType.Movie,
                                 OriginalLanguage =  "en",
                                 Title =  "Guardians of the Galaxy",
                                 BackdropPath = "/bHarw8xrmQeqf3t8HpuMY7zoK4x.jpg",
@@ -257,7 +259,7 @@ namespace TMDBNet.Tests.Search
                                 Overview = "The Mrs Bradley Mysteries is a 1998-99 British drama series starring Diana Rigg as Adela Bradley, and Neil Dudgeon as her chauffeur George Moody. The series was produced by the BBC for its BBC One channel, based on the character created by detective writer Gladys Mitchell. Five episodes were produced, including a pilot special. Graham Dalby provided the theme music You're the Cream in My Coffee and he appeared with his orchestra in two episodes. Stylish images of the 1920s are featured, including a classic Rolls Royce limousine and art deco fashions and jewellery worn by the title character.\n\nThe series was shown in the United States by PBS broadcaster WGBH as part of its Mystery! anthology strand, and introduced by Diana Rigg. The full series was also aired in Australia in 2011 by the Seven Network's station 7Two.",
                                 BackdropPath = "/lHebXNadF0WDJWTxO4Zud3xM8he.jpg",
                                 VoteAverage = 0,
-                                MediaType = Model.MediaType.Tv,
+                                MediaType = MediaType.Tv,
                                 FirstAirDate = "10-10-2012",
                                 OriginalCountry = new string[]
                                 {
@@ -289,7 +291,7 @@ namespace TMDBNet.Tests.Search
                 Content = new StringContent(JsonConvert.SerializeObject(allMovieProperties))
             });
 
-            var search = new TMDBNet.Implementations.Search("", httpClient);
+            var search = new SearchApi("", httpClient);
 
             var result = await search.MovieAsync("avengers");
 
@@ -300,7 +302,7 @@ namespace TMDBNet.Tests.Search
             for (var index = 0; index < result.Results.Count; index++)
             {
                 var movie = result.Results[index];
-                var expectedMovie = SearchResultFactory.CreateMovie(
+                var expectedMovie = MediaFactory.Create<Movie>(
                     allMovieProperties.Results[index]);
 
                 movie.ShouldBe(expectedMovie);
@@ -316,7 +318,7 @@ namespace TMDBNet.Tests.Search
                 Content = new StringContent(JsonConvert.SerializeObject(allTvShowProperties))
             });
 
-            var search = new TMDBNet.Implementations.Search("", httpClient);
+            var search = new SearchApi("", httpClient);
 
             var result = await search.TvShowAsync("Game of thrones");
 
@@ -327,7 +329,7 @@ namespace TMDBNet.Tests.Search
             for (var index = 0; index < result.Results.Count; index++)
             {
                 var tvShow = result.Results[index];
-                var expectedTvShow = SearchResultFactory.CreateTvShow(
+                var expectedTvShow = MediaFactory.Create<TvShow>(
                     allTvShowProperties.Results[index]);
 
                 tvShow.ShouldBe(expectedTvShow);
@@ -343,7 +345,7 @@ namespace TMDBNet.Tests.Search
                 Content = new StringContent(JsonConvert.SerializeObject(allPeopleProperties))
             });
 
-            var search = new TMDBNet.Implementations.Search("", httpClient);
+            var search = new SearchApi("", httpClient);
 
             var result = await search.PeopleAsync("Bradley");
 
@@ -354,7 +356,7 @@ namespace TMDBNet.Tests.Search
             for (var index = 0; index < result.Results.Count; index++)
             {
                 var people = result.Results[index];
-                var expectedPeople = SearchResultFactory.CreatePeople(allPeopleProperties.Results[index]);
+                var expectedPeople = SearchResultItemFactory.Create<People>(allPeopleProperties.Results[index]);
 
                 people.ShouldBe(expectedPeople);
             }
@@ -369,14 +371,14 @@ namespace TMDBNet.Tests.Search
                 Content = new StringContent(JsonConvert.SerializeObject(allMultiSearchProperties))
             });
 
-            var search = new TMDBNet.Implementations.Search("", httpClient);
+            var search = new SearchApi("", httpClient);
 
             var result = await search.MultiSearchAsync("Bradley");
 
             result.ShouldNotBeNull();
             result.Results.ShouldNotBeNull();
 
-            var expected = SearchResultFactory.CreateMultiSearch(allMultiSearchProperties);
+            var expected = SearchResultItemFactory.Create(allMultiSearchProperties.Results);
             var actual = result.Results;
 
             actual.ShouldBe(expected);

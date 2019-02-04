@@ -6,7 +6,10 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using TMDBNet.Model.Search;
+using TMDBNet.Search;
+using TMDBNet.Search.DTO;
+using TMDBNet.Search.Factories;
+using TMDBNet.Search.Model;
 using Xunit;
 
 namespace TMDBNet.Tests.Search
@@ -77,7 +80,7 @@ namespace TMDBNet.Tests.Search
                 Content = new StringContent(JsonConvert.SerializeObject(nullProperties))
             });
 
-            var search = new TMDBNet.Implementations.Search("", httpClient);
+            var search = new SearchApi("", httpClient);
 
             var result = await search.MovieAsync("avengers");
 
@@ -88,7 +91,7 @@ namespace TMDBNet.Tests.Search
             for (var index = 0; index < result.Results.Count; index++)
             {
                 var movie = result.Results[index];
-                var expectedMovie = SearchResultFactory.CreateMovie(
+                var expectedMovie = SearchResultItemFactory.Create<Movie>(
                     nullProperties.Results[index]);
 
                 movie.ShouldBe(expectedMovie);

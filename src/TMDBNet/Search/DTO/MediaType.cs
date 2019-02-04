@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TMDBNet.Model
+namespace TMDBNet.Search.DTO
 {
     public enum MediaType
     {

@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TMDBNet.Model.Search
+namespace TMDBNet.Search.Model
 {
-    public sealed class KeyWord
+    public sealed class Company
     {
         public int Id { get; }
+        public string LogoPath { get; }
         public string Name { get; }
 
-        public KeyWord(int id, string name)
+        public Company(int id, string logoPath, string name)
         {
             Id = id;
+            LogoPath = logoPath;
             Name = name;
         }
     }
