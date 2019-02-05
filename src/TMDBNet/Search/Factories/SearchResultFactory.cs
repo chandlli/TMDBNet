@@ -11,39 +11,33 @@ namespace TMDBNet.Search.Factories
 {
     internal static class SearchResultFactory
     {
-        internal static SearchResult<T> CreateSearchResult<T>(SearchResultDTO searchResult)
+        internal static SearchResult<MultiSearch> CreateMultiSearch(SearchResultDTO searchResult)
         {
             if (searchResult == null)
                 return null;
 
             searchResult.Results = searchResult.Results ?? Array.Empty<SearchResultItemDTO>();
 
-            object results;
+            var results = SearchResultItemFactory.Create(searchResult.Results);
 
-            if (typeof(T) == typeof(MultiSearch))
-            {
-                results = SearchResultItemFactory.Create(searchResult.Results);
-            }
-            else
-            {
-                results = CreateResults<T>(searchResult.Results);
-            }
-
-            var finalResults = (T)Convert.ChangeType(results, typeof(T));
-
-            return new SearchResult<T>(finalResults, searchResult.Page, searchResult.TotalResults, searchResult.TotalPages);
+            return new SearchResult<MultiSearch>(results, searchResult.Page, searchResult.TotalResults, searchResult.TotalPages);
         }
 
-        private static IList<T> CreateResults<T>(SearchResultItemDTO[] searchResultItens)
+        internal static SearchResult<IList<T>> CreateList<T>(SearchResultDTO searchResult)
         {
+            if (searchResult == null)
+                return null;
+
+            searchResult.Results = searchResult.Results ?? Array.Empty<SearchResultItemDTO>();
+
             var results = new List<T>();
 
-            foreach (var serachResultItem in searchResultItens)
+            foreach (var serachResultItem in searchResult.Results)
             {
                 results.Add(SearchResultItemFactory.Create<T>(serachResultItem));
             }
 
-            return results;
+            return new SearchResult<IList<T>>(results, searchResult.Page, searchResult.TotalResults, searchResult.TotalPages);
         }
     }
 }

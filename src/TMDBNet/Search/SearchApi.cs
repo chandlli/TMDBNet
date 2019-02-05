@@ -37,7 +37,7 @@ namespace TMDBNet.Search
 
             var searchResultDTO = await GetSearchResultAsync("search/movie", queryString);
 
-            return SearchResultFactory.CreateSearchResult<IList<Movie>>(searchResultDTO);
+            return SearchResultFactory.CreateList<Movie>(searchResultDTO);
         }
 
         public async Task<SearchResult<IList<TvShow>>> TvShowAsync(string query, string language = null, int page = 1, int? firstAirDateYear = null)
@@ -51,7 +51,7 @@ namespace TMDBNet.Search
 
             var searchResultDTO = await GetSearchResultAsync("search/tv", queryString);
 
-            return SearchResultFactory.CreateSearchResult<IList<TvShow>>(searchResultDTO);
+            return SearchResultFactory.CreateList<TvShow>(searchResultDTO);
         }
 
         public async Task<SearchResult<IList<People>>> PeopleAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
@@ -66,7 +66,7 @@ namespace TMDBNet.Search
 
             var searchResultDTO = await GetSearchResultAsync("search/person", queryString);
 
-            return SearchResultFactory.CreateSearchResult<IList<People>>(searchResultDTO);
+            return SearchResultFactory.CreateList<People>(searchResultDTO);
         }
 
         public async Task<SearchResult<MultiSearch>> MultiSearchAsync(string query, string language = null, int page = 1, bool includeAdult = true, string region = null)
@@ -81,7 +81,7 @@ namespace TMDBNet.Search
 
             var searchResultDTO = await GetSearchResultAsync("search/multi", queryString);
 
-            return SearchResultFactory.CreateSearchResult<MultiSearch>(searchResultDTO);
+            return SearchResultFactory.CreateMultiSearch(searchResultDTO);
         }
 
         public async Task<SearchResult<IList<KeyWord>>> KeyWordAsync(string query, int page = 1)
@@ -93,7 +93,7 @@ namespace TMDBNet.Search
 
             var searchResultDTO = await GetSearchResultAsync("search/keyword", queryString);
 
-            return SearchResultFactory.CreateSearchResult<IList<KeyWord>>(searchResultDTO);
+            return SearchResultFactory.CreateList<KeyWord>(searchResultDTO);
         }
 
         public async Task<SearchResult<IList<Collection>>> CollectionAsync(string query, string language = null, int page = 1)
@@ -106,7 +106,7 @@ namespace TMDBNet.Search
 
             var searchResultDTO = await GetSearchResultAsync("search/collection", queryString);
 
-            return SearchResultFactory.CreateSearchResult<IList<Collection>>(searchResultDTO);
+            return SearchResultFactory.CreateList<Collection>(searchResultDTO);
         }
 
         public async Task<SearchResult<IList<Company>>> CompaniesAsync(string query, int page = 1)
@@ -118,7 +118,7 @@ namespace TMDBNet.Search
 
             var searchResultDTO = await GetSearchResultAsync("search/company", queryString);
 
-            return SearchResultFactory.CreateSearchResult<IList<Company>>(searchResultDTO);
+            return SearchResultFactory.CreateList<Company>(searchResultDTO);
         }
 
         private async Task<SearchResultDTO> GetSearchResultAsync(string path, NameValueCollection queryString)
