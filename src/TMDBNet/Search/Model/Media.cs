@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TMDBNet.Extensions;
 
 namespace TMDBNet.Search.Model
 {
@@ -43,7 +44,7 @@ namespace TMDBNet.Search.Model
             var media = (Media)obj;
 
             return string.Equals(media.BackdropPath, BackdropPath) &&
-                media.GenresId.SequenceEqual(GenresId) &&
+                media.GenresId.SafeSequenceEquals(GenresId) &&
                 media.Id == Id &&
                 string.Equals(media.OriginalLanguage, OriginalLanguage) &&
                 string.Equals(media.Overview, Overview) &&

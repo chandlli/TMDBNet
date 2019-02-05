@@ -31,39 +31,33 @@ namespace TMDBNet.Tests.Search
                         IsAdult = true,
                         Overview = null,
                         ReleaseDate = null,
-                        GenresId = new int[]
-                        {
-                            878, 28, 12
-                        },
-                        Id = 24428,
+                        GenresId = null,
+                        Id = null,
                         OriginalTitle = null,
                         OriginalLanguage = null,
                         Title = null,
                         BackdropPath = null,
-                        Popularity = 7.353212m,
-                        VoteCount = 8503,
-                        Video = true,
-                        VoteAverage = 7.33m
+                        Popularity = null,
+                        VoteCount = null,
+                        Video = null,
+                        VoteAverage = null
                     },
                     new SearchResultItemDTO()
                     {
                         PosterPath = null,
-                        IsAdult = true,
+                        IsAdult = null,
                         Overview = null,
                         ReleaseDate = null,
-                        GenresId = new int[]
-                        {
-                            53
-                        },
-                        Id = 9320,
+                        GenresId = null,
+                        Id = null,
                         OriginalTitle = null,
                         OriginalLanguage = null,
                         Title = null,
                         BackdropPath = null,
-                        Popularity = 2.270454m,
-                        VoteCount = 111,
-                        Video = true,
-                        VoteAverage = 4.7m
+                        Popularity = null,
+                        VoteCount = null,
+                        Video = null,
+                        VoteAverage = null
                     }
                 },
                 TotalResults = 2,
@@ -72,7 +66,7 @@ namespace TMDBNet.Tests.Search
         }
 
         [Fact]
-        public async Task Movie_Strings_Null()
+        public async Task Movie_Null()
         {
             var httpClient = HttpClientMockFactory.CreateClient(new HttpResponseMessage()
             {
