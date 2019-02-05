@@ -6,12 +6,12 @@ namespace TMDBNet.Search.Model
 {
     public sealed class Collection
     {
-        public int Id { get; }
+        public int? Id { get; }
         public string BackdropPath { get; }
         public string Name { get; }
         public string PosterPath { get; }
 
-        public Collection(int id, string backdropPath, string name, string posterPath)
+        public Collection(int? id, string backdropPath, string name, string posterPath)
         {
             Id = id;
             BackdropPath = backdropPath;

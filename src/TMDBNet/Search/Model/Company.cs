@@ -6,11 +6,11 @@ namespace TMDBNet.Search.Model
 {
     public sealed class Company
     {
-        public int Id { get; }
+        public int? Id { get; }
         public string LogoPath { get; }
         public string Name { get; }
 
-        public Company(int id, string logoPath, string name)
+        public Company(int? id, string logoPath, string name)
         {
             Id = id;
             LogoPath = logoPath;

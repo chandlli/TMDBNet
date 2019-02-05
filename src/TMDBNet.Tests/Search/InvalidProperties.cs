@@ -66,6 +66,33 @@ namespace TMDBNet.Tests.Search
         }
 
         [Fact]
+        public async Task Collection_Null()
+        {
+            var httpClient = HttpClientMockFactory.CreateClient(new HttpResponseMessage()
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(JsonConvert.SerializeObject(nullProperties))
+            });
+
+            var search = new SearchApi("", httpClient);
+
+            var result = await search.CollectionAsync("");
+
+            result.ShouldNotBeNull();
+            result.Results.ShouldNotBeNull();
+            result.Results.Count.ShouldBe(nullProperties.Results.Length);
+
+            for (var index = 0; index < result.Results.Count; index++)
+            {
+                var collection = result.Results[index];
+                var expectedMovie = SearchResultItemFactory.Create<Collection>(
+                    nullProperties.Results[index]);
+
+                collection.ShouldBe(expectedMovie);
+            }
+        }
+
+        [Fact]
         public async Task Movie_Null()
         {
             var httpClient = HttpClientMockFactory.CreateClient(new HttpResponseMessage()

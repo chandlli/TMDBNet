@@ -70,18 +70,18 @@ namespace TMDBNet.Search.Factories
 
         private static Collection CreateCollection(SearchResultItemDTO searchResultItem)
         {
-            return new Collection(searchResultItem.Id.Value, searchResultItem.BackdropPath,
+            return new Collection(searchResultItem.Id, searchResultItem.BackdropPath,
                 searchResultItem.Name, searchResultItem.PosterPath);
         }
 
         private static Company CreateCompany(SearchResultItemDTO searchResultItem)
         {
-            return new Company(searchResultItem.Id.Value, searchResultItem.LogoPath, searchResultItem.Name);
+            return new Company(searchResultItem.Id, searchResultItem.LogoPath, searchResultItem.Name);
         }
 
         private static KeyWord CreateKeyWord(SearchResultItemDTO searchResultItem)
         {
-            return new KeyWord(searchResultItem.Id.Value, searchResultItem.Name);
+            return new KeyWord(searchResultItem.Id, searchResultItem.Name);
         }
 
         private static People CreatePeople(SearchResultItemDTO searchResultItem)
