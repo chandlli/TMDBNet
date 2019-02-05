@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TMDBNet.Extensions;
 
 namespace TMDBNet.Search.Model
 {
@@ -33,10 +34,10 @@ namespace TMDBNet.Search.Model
 
             var tvShow = (TvShow)obj;
 
-            return tvShow.OriginalCountry.SequenceEqual(OriginalCountry) &&
-                tvShow.FirstAirDate.Equals(FirstAirDate) &&
-                tvShow.Name.Equals(Name) &&
-                tvShow.OriginalName.Equals(OriginalName) &&
+            return tvShow.OriginalCountry.SafeSequenceEquals(OriginalCountry) &&
+                string.Equals(tvShow.FirstAirDate, FirstAirDate) &&
+                string.Equals(tvShow.Name, Name) &&
+                string.Equals(tvShow.OriginalName, OriginalName) &&
                 base.Equals(tvShow);
         }
 

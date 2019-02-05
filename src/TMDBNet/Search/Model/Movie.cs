@@ -38,8 +38,8 @@ namespace TMDBNet.Search.Model
             return string.Equals(movie.Title, Title) &&
                 string.Equals(movie.OriginalTitle, OriginalTitle) &&
                 string.Equals(movie.ReleaseDate, ReleaseDate) &&
-                movie.Video.Equals(Video) &&
-                movie.IsAdult.Equals(IsAdult) &&
+                bool.Equals(movie.Video, Video) &&
+                bool.Equals(movie.IsAdult, IsAdult) &&
                 base.Equals(movie);
         }
 

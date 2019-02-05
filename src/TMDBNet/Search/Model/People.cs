@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TMDBNet.Extensions;
 
 namespace TMDBNet.Search.Model
 {
@@ -50,13 +51,13 @@ namespace TMDBNet.Search.Model
 
             var people = (People)obj;
 
-            return people.Id.Equals(Id) &&
-                people.IsAdult.Equals(IsAdult) &&
-                people.Name.Equals(Name) &&
-                people.Popularity.Equals(Popularity) &&
-                people.ProfilePath.Equals(ProfilePath) &&
-                people.KnownForMovies.SequenceEqual(KnownForMovies) &&
-                people.KnownForTvShows.SequenceEqual(KnownForTvShows);
+            return people.Id == Id &&
+                bool.Equals(people.IsAdult, IsAdult) &&
+                string.Equals(people.Name, Name) &&
+                people.Popularity == Popularity &&
+                string.Equals(people.ProfilePath, ProfilePath) &&
+                people.KnownForMovies.SafeSequenceEquals(KnownForMovies) &&
+                people.KnownForTvShows.SafeSequenceEquals(KnownForTvShows);
         }
 
         public override int GetHashCode()
